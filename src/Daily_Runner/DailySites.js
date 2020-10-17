@@ -41,7 +41,7 @@ const DailySites = () => {
             tabsCopy.splice(tabsCopy.indexOf(tab), 1);
             localStorage.setItem('tabs', JSON.stringify(tabsCopy));
             setTabs(tabsCopy)
-            // window.location.reload()
+            window.location.reload()
         }
     }
 
