@@ -36,12 +36,11 @@ const DailySites = () => {
     }
 
     function onRemoveClick(tab) {
-        let tabsCopy = tabs;
         if (tab) {
-            tabsCopy.splice(tabsCopy.indexOf(tab), 1);
+            let tabsCopy = tabs.slice()
+            tabsCopy.splice(tabs.indexOf(tab), 1);
             localStorage.setItem('tabs', JSON.stringify(tabsCopy));
             setTabs(tabsCopy)
-            window.location.reload()
         }
     }
 
