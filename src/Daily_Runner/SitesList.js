@@ -20,28 +20,21 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SitesList(props) {
   const classes = useStyles();
-  const [checked, setChecked] = React.useState(() => {
-    const tabs = JSON.parse(localStorage.getItem('checkedTabs'));
-    return tabs ? tabs : [];
-  });
+
+  const tabs = props.tabs.slice();
 
   const handleToggle = (value) => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
+    const currentTab = tabs.filter(tab => tab.value === value)[0];
+    currentTab.checked = !currentTab.checked
 
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-
-    localStorage.setItem('checkedTabs', JSON.stringify(newChecked))
-    setChecked(newChecked);
+    localStorage.setItem('tabs', JSON.stringify(tabs))
+    props.setTabs(tabs);
   };
 
   return (
     <List className={classes.root}>
-      {props.tabs.map((value) => {
+      {tabs.map((tab) => {
+        const value = tab.value;
         const labelId = `checkbox-list-label-${value}`;
 
         return (
@@ -49,7 +42,7 @@ export default function SitesList(props) {
             <ListItemIcon>
               <Checkbox
                 edge="start"
-                checked={checked.indexOf(value) !== -1}
+                checked={tab.checked}
                 tabIndex={-1}
                 disableRipple
                 inputProps={{ 'aria-labelledby': labelId }}

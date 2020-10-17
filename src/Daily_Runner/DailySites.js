@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import SitesList from './SitesList';
 
-function clearTabs() {
-    localStorage.setItem('tabs', JSON.stringify([]));
-    localStorage.setItem('checkedTabs', JSON.stringify([]))
-}
-
 const DailySites = () => {
     useEffect(() => {
         document.querySelector('input').addEventListener('keyup', event => {
@@ -23,8 +18,25 @@ const DailySites = () => {
         return tabs ? tabs : [];
     })
 
+    const hasAllCheckedTabs = () => {
+        const tabsCopy = tabs.slice();
+        const numberOfCheckedTabs = tabsCopy.filter(tab => tab.checked);
+        return numberOfCheckedTabs.length === tabs.length
+    }
+
+    function toggleCheckAll() {
+        let tabsCopy = tabs.slice();
+        if (hasAllCheckedTabs()) {
+            tabsCopy.map(tab => tab.checked = false)
+        } else {
+            tabsCopy.map(tab => tab.checked = true)
+        }
+        localStorage.setItem('tabs', JSON.stringify(tabsCopy))
+        setTabs(tabsCopy)
+    }
+
     function addTab() {
-        const tab = getInputValue();
+        const tab = { checked: false, value: getInputValue()}
         if (tab) {
             const newTabs = [tab, ...tabs];
         
@@ -66,18 +78,20 @@ const DailySites = () => {
         return input && input.value
     }
 
+    const toggleAllButtonTitle = hasAllCheckedTabs() ? 'Uncheck all' : 'Check all'
+
     return (
         <div>
             <div>Daily Sites</div>
             <menu style={menuStyles}>
                 <button onClick={loadSites} style={{marginBottom: "1.2rem"}}>Click to rerun scripts</button>
-                <button onClick={clearTabs} style={{marginBottom: "1.2rem"}}>Clear All Tabs</button>
+                <button onClick={toggleCheckAll} style={{marginBottom: "1.2rem"}}>{toggleAllButtonTitle}</button>
                 <label>Add New Tab:</label>
                 <input></input>
                 <button onClick={addTab}>Add Tab</button>
             </menu>
             <div style={{ justifyContent: "left", display: "flex" }}>Sites to be loaded:</div>
-            <SitesList {...{ onRemoveClick, tabs }} />
+            <SitesList {...{ onRemoveClick, setTabs, tabs }} />
         </div>
     )
 }
