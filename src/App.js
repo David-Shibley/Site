@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from './getting.work.done.gif';
 import Header from './Header.js';
 import './App.css';
 

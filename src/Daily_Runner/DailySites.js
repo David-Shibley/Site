@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import SitesList from './SitesList';
+import { Button, TextField, Box, Container, ButtonGroup } from '@material-ui/core';
 
 const DailySites = () => {
     useEffect(() => {
-        document.querySelector('input').addEventListener('keyup', event => {
-            if (event.keyCode === 13) {
-                const input = document.querySelector('input');
-                const tab = input && input.value;
-                addTab(tab);
-                input ? input.value = "" : null;
+        const input = document.querySelector('#AddNewTabField');
+        input.addEventListener('keyup', event => {
+            if (event.keyCode === 13 && input.value) {
+                addTab();                    
             }
         })
     })
@@ -17,11 +16,10 @@ const DailySites = () => {
         const tabs = JSON.parse(localStorage.getItem('tabs'));
         return tabs ? tabs : [];
     })
+    const checkedTabs = tabs.filter(tab => tab.checked);
 
     const hasAllCheckedTabs = () => {
-        const tabsCopy = tabs.slice();
-        const numberOfCheckedTabs = tabsCopy.filter(tab => tab.checked);
-        return numberOfCheckedTabs.length === tabs.length
+        return checkedTabs.length === tabs.length
     }
 
     function toggleCheckAll() {
@@ -34,16 +32,24 @@ const DailySites = () => {
         localStorage.setItem('tabs', JSON.stringify(tabsCopy))
         setTabs(tabsCopy)
     }
+        
+    const getInputValue = () => {
+        const input = document.querySelector('#AddNewTabField');
+
+        return input && input.value
+    }
 
     function addTab() {
         const tab = { checked: false, value: getInputValue()}
+        const storedTabs = JSON.parse(localStorage.getItem('tabs'));
+
         if (tab) {
-            const newTabs = [tab, ...tabs];
+            const newTabs = [tab, ...storedTabs];
         
             localStorage.setItem('tabs', JSON.stringify(newTabs));
             setTabs(newTabs);
-            const input = document.querySelector('input');
-            input ? input.value = "" : null;
+            const input = document.querySelector('#AddNewTabField');
+            input ? input.value = "" : input.value = null;
         }
     }
 
@@ -57,42 +63,49 @@ const DailySites = () => {
     }
 
     function loadSites()  {
-        if (tabs) {
-            tabs.map(tab => {
-                window.open(tab);
-            });
-        }
+        return checkedTabs && checkedTabs.forEach(tab => window.open(tab.value))
     }
 
-    const menuStyles = {
-        display: "flex",
-        padding: 0,
-        justifyContent: "space-between",
-        width: "29vw",
-        flexWrap: "wrap",
-    }
-    
-    const getInputValue = () => {
-        const input = document.querySelector('input');
-
-        return input && input.value
+    function deleteSelected() {
+        const newTabs = tabs.filter(tab => !tab.checked)
+        localStorage.setItem('tabs', JSON.stringify(newTabs));
+        setTabs(newTabs)
     }
 
     const toggleAllButtonTitle = hasAllCheckedTabs() ? 'Uncheck all' : 'Check all'
+    const checkedItems = tabs.length && tabs.filter(tab => tab.checked)
+
+    const getActionMenu = () => {
+        return (
+            <ButtonGroup>
+                <Button onClick={loadSites}>Open Selected</Button>
+                <Button onClick={deleteSelected}>Delete Selected</Button>
+                <Button onClick={toggleCheckAll}>{toggleAllButtonTitle}</Button>
+            </ButtonGroup>
+        )
+    }
+
+    const addNewInputProps = {
+        id: "AddNewTabField",
+        label: "Add New",
+        autoFocus: true,
+    }
+
+    const containerStyles = {
+        display: 'flex',
+        flexDirection: 'column',
+        padding: '2.4rem 0',
+    }
 
     return (
-        <div>
-            <div>Daily Sites</div>
-            <menu style={menuStyles}>
-                <button onClick={loadSites} style={{marginBottom: "1.2rem"}}>Click to rerun scripts</button>
-                <button onClick={toggleCheckAll} style={{marginBottom: "1.2rem"}}>{toggleAllButtonTitle}</button>
-                <label>Add New Tab:</label>
-                <input></input>
-                <button onClick={addTab}>Add Tab</button>
-            </menu>
-            <div style={{ justifyContent: "left", display: "flex" }}>Sites to be loaded:</div>
+        <Container style={{...containerStyles}}>
+            {tabs.length ? getActionMenu() : null}
+            <Box style={{ display: 'flex', alignItems: 'baseline'}}>
+                <Button onClick={addTab}>Add</Button>
+                <TextField {...addNewInputProps}></TextField>
+            </Box>
             <SitesList {...{ onRemoveClick, setTabs, tabs }} />
-        </div>
+        </Container>
     )
 }
 

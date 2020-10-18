@@ -3,3 +3,7 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+
+.MuiContainer-root.MuiContainer-maxWidthLg > * {
+  padding: 1.2rem;
+}

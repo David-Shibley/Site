@@ -51,7 +51,7 @@ export default function SitesList(props) {
             <ListItemText id={labelId} primary={value} />
             <ListItemSecondaryAction>
               <Tooltip title="Delete">
-                <IconButton aria-label="delete" edge="end" onClick={() => {props.onRemoveClick(value)}}>
+                <IconButton aria-label="delete" edge="end" onClick={() => {props.onRemoveClick(tab)}}>
                   <DeleteIcon/>
                 </IconButton>
               </Tooltip>

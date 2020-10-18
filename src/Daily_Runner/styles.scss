@@ -1,0 +1,45 @@
+// /* CSS HEX */
+// --rich-black-fogra-29: #071013ff;
+// --pacific-blue: #23b5d3ff;
+// --pewter-blue: #75abbcff;
+// --cadet-blue-crayola: #a2aebbff;
+// --gainsboro: #dfe0e2ff;
+
+/* CSS HSL */
+// --rich-black-fogra-29: hsla(195, 46%, 5%, 1);
+// --pacific-blue: hsla(190, 72%, 48%, 1);
+// --pewter-blue: hsla(194, 35%, 60%, 1);
+// --cadet-blue-crayola: hsla(211, 16%, 68%, 1);
+// --gainsboro: hsla(220, 5%, 88%, 1);
+
+/* SCSS HEX */
+$rich-black-fogra-29: #071013ff;
+$pacific-blue: #23b5d3ff;
+$pewter-blue: #75abbcff;
+$cadet-blue-crayola: #a2aebbff;
+$gainsboro: #dfe0e2ff;
+
+/* SCSS HSL */
+$rich-black-fogra-29: hsla(195, 46%, 5%, 1);
+$pacific-blue: hsla(190, 72%, 48%, 1);
+$pewter-blue: hsla(194, 35%, 60%, 1);
+$cadet-blue-crayola: hsla(211, 16%, 68%, 1);
+$gainsboro: hsla(220, 5%, 88%, 1);
+
+/* SCSS RGB */
+$rich-black-fogra-29: rgba(7, 16, 19, 1);
+$pacific-blue: rgba(35, 181, 211, 1);
+$pewter-blue: rgba(117, 171, 188, 1);
+$cadet-blue-crayola: rgba(162, 174, 187, 1);
+$gainsboro: rgba(223, 224, 226, 1);
+
+/* SCSS Gradient */
+$gradient-top: linear-gradient(0deg, #071013ff, #23b5d3ff, #75abbcff, #a2aebbff, #dfe0e2ff);
+$gradient-right: linear-gradient(90deg, #071013ff, #23b5d3ff, #75abbcff, #a2aebbff, #dfe0e2ff);
+$gradient-bottom: linear-gradient(180deg, #071013ff, #23b5d3ff, #75abbcff, #a2aebbff, #dfe0e2ff);
+$gradient-left: linear-gradient(270deg, #071013ff, #23b5d3ff, #75abbcff, #a2aebbff, #dfe0e2ff);
+$gradient-top-right: linear-gradient(45deg, #071013ff, #23b5d3ff, #75abbcff, #a2aebbff, #dfe0e2ff);
+$gradient-bottom-right: linear-gradient(135deg, #071013ff, #23b5d3ff, #75abbcff, #a2aebbff, #dfe0e2ff);
+$gradient-top-left: linear-gradient(225deg, #071013ff, #23b5d3ff, #75abbcff, #a2aebbff, #dfe0e2ff);
+$gradient-bottom-left: linear-gradient(315deg, #071013ff, #23b5d3ff, #75abbcff, #a2aebbff, #dfe0e2ff);
+$gradient-radial: radial-gradient(#071013ff, #23b5d3ff, #75abbcff, #a2aebbff, #dfe0e2ff);
