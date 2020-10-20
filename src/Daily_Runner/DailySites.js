@@ -40,12 +40,14 @@ const DailySites = () => {
     }
 
     function addTab() {
-        const tab = { checked: false, value: getInputValue()}
+        const tab = { checked: false, value: getInputValue()};
         const storedTabs = JSON.parse(localStorage.getItem('tabs'));
+        let newTabs = [tab];
 
         if (tab) {
-            const newTabs = [tab, ...storedTabs];
-        
+            if (storedTabs) {
+                newTabs = [...newTabs, ...storedTabs]
+            }
             localStorage.setItem('tabs', JSON.stringify(newTabs));
             setTabs(newTabs);
             const input = document.querySelector('#AddNewTabField');

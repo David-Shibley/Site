@@ -12,9 +12,18 @@ body {
   background-color: #f45b69;
 }
 
-.front, .back {
-	width: 320px;
-	height: 480px;
+.flip-container {
+	margin: 1.2rem;
+	box-shadow: 0 0 4px rgba(0, 0, 0, 0.5)
+}
+
+.flip-container:hover .flipper, .flip-container.hover .flipper {
+	transform: rotateY(180deg);
+}
+
+.flip-container, .front, .back {
+	width: 250px;
+	height: 200px;
 }
 
 /* flip speed goes here */

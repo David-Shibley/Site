@@ -8,43 +8,57 @@ import './App.css';
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
-    '& > *': {
-      margin: theme.spacing(1),
-    },
-    width: '320px',
-    height: '480px',
-    '&:hover .flipper, .flip-container.hover .flipper': {
-        transform: 'rotateY(180deg)',
-      }
+    justifyContent: 'center',
+    paddingTop: '25vh',
   },
   avatar: {
     width: theme.spacing(15),
     height: theme.spacing(15),
+    alignSelf: 'center',
     animation: 'App-logo-spin infinite 20s linear',
   },
+  cardContent: {
+    display: 'flex',
+    justifyContent: 'center',
+    padding: 0,
+    flexFlow: 'column',
+  },
+  cardActions: {
+    display: 'flex',
+    justifyContent: 'center',
+    flexFlow: 'column',
+  }
 }));
 
 const Portfolio = () => {
   const classes = useStyles();
 
+  const openGithub = () => {
+    return window.open('https://github.com/David-Shibley?tab=repositories')
+  }
+
   return (
     <Container className={classes.root}>
-      <Card class="flipper" ontouchstart="this.classList.toggle('hover');">
-        <CardHeader>Working</CardHeader>
-        <CardContent class="front">
-          <Avatar src={DoWorkLogo} className={classes.avatar} alt="logo" tooltip="working" />
-          <Typography>Page is currently being worked on</Typography>
-          <CardActions>
-            <Button>Hover here to learn more</Button>
-          </CardActions>
-        </CardContent>
-        <CardContent class="back">
-          <Avatar src={DoWorkLogo} className={classes.avatar} alt="logo" tooltip="working" />
-          <Typography>See the code on github</Typography>
-          <CardActions>
-            <Link src="https://github.com/David-Shibley?tab=repositories">Hover here to learn more</Link>
-          </CardActions>
-        </CardContent>
+      <Card class="flip-container">
+        <div class="flipper"  ontouchstart="this.classList.toggle('hover');">
+          <div class="front">
+            <CardContent className={classes.cardContent}>
+              <Typography>Page is currently being worked on</Typography>
+              <Avatar src={DoWorkLogo} className={classes.avatar} alt="logo" tooltip="working" />
+              <CardActions className={classes.cardActions}>
+                <Button>Hover here to learn more</Button>
+              </CardActions>
+            </CardContent>
+          </div>
+          <div class="back">
+            <CardContent className={classes.cardContent}>
+              <CardActions className={classes.cardActions}>              
+                <Avatar src={DoWorkLogo} className={classes.avatar} alt="logo" tooltip="working" />
+                <Button onClick={openGithub}>See the code on github</Button>
+              </CardActions>
+            </CardContent>
+          </div>          
+        </div>
       </Card>
     </Container>
   )
