@@ -1,10 +1,8 @@
-import React, { useRef, useState } from 'react';
-import { Card, CardContent, makeStyles, Avatar } from '@material-ui/core';
-
+import React, { useState } from 'react';
+import Die from './Die';
 // Green, blue, yellow, orange, red
 const colorsArray = ['#214E34', '#3b8ea5', '#f5ee9e', '#f49e4c', '#ab3428']
 const playersArray = [{ name: 'bob', color: 'red' }, { name: 'billy', color: 'green'}];
-const user = playersArray[1]
 
 const getRandomNumber = (min, max) => {
     min = Math.ceil(min);
@@ -13,56 +11,12 @@ const getRandomNumber = (min, max) => {
 }
 
 const generateDice = () => {
-    const randomDieNumber = getRandomNumber(1, 6);
+    const randomDieNumber = getRandomNumber(1, 7);
     const randomColorIndex = getRandomNumber(0, 4);
 
     const chosenColor = colorsArray[randomColorIndex];
 
     return { chosenColor, randomDieNumber }
-}
-
-const Die = props => {
-    const { dice, die, players, setDice } = props;
-
-    const styles = makeStyles((theme) => ({
-        dice: {
-            backgroundColor: die.chosenColor,
-            height: '12rem',
-            widows: '12rem'
-        },
-        avatar: {
-            backgroundColor: user.color,
-            height: '12rem',
-            widows: '12rem'
-        }
-    }))
-
-    const dieRef = useRef();
-
-    const classes = styles()
-
-    const onDiceClick = props => {
-        const dieIndex = dice.indexOf(die);
-        const newDiceArray = new Array(...dice);
-        // TODO: make this dynamic
-        newDiceArray[dieIndex].owner = players[0].name
-        setDice(newDiceArray);
-    }
-
-    const UserAvatar = (() => {
-        return (
-            <Avatar alt={user.name} src="">{players[0].name}</Avatar>
-        )
-    })()
-
-    return (
-        <Card className={classes.dice} onClick={onDiceClick}>
-            <CardContent ref={dieRef}>
-                {die.randomDieNumber}
-                {die.owner ? UserAvatar : null}
-            </CardContent>
-        </Card>
-    )
 }
 
 const Dice = () => {
