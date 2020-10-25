@@ -75,7 +75,6 @@ const DailySites = () => {
     }
 
     const toggleAllButtonTitle = hasAllCheckedTabs() ? 'Uncheck all' : 'Check all'
-    const checkedItems = tabs.length && tabs.filter(tab => tab.checked)
 
     const getActionMenu = () => {
         return (

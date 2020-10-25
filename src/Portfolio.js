@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Container, Avatar, Card, CardHeader, CardContent, CardActions, Button, Typography, Link } from '@material-ui/core';
+import { Container, Avatar, Card, CardContent, CardActions, Button, Typography } from '@material-ui/core';
 
 import DoWorkLogo from './getting.work.done.gif';
 import './App.css';
@@ -39,9 +39,9 @@ const Portfolio = () => {
 
   return (
     <Container className={classes.root}>
-      <Card class="flip-container">
-        <div class="flipper"  ontouchstart="this.classList.toggle('hover');">
-          <div class="front">
+      <Card className="flip-container">
+        <div className="flipper"  onTouchStart={() => {this.classList.toggle('hover')}}>
+          <div className="front">
             <CardContent className={classes.cardContent}>
               <Typography>Page is currently being worked on</Typography>
               <Avatar src={DoWorkLogo} className={classes.avatar} alt="logo" tooltip="working" />
@@ -50,7 +50,7 @@ const Portfolio = () => {
               </CardActions>
             </CardContent>
           </div>
-          <div class="back">
+          <div className="back">
             <CardContent className={classes.cardContent}>
               <CardActions className={classes.cardActions}>              
                 <Avatar src={DoWorkLogo} className={classes.avatar} alt="logo" tooltip="working" />

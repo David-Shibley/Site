@@ -1,9 +1,9 @@
-import React from 'react'
-import { Container } from '@material-ui/core';
+import React, { useState, useEffect } from 'react'
+import { Container, Slider } from '@material-ui/core';
 
 import Dice from './Dice';
 
-const countdownTimer = () => {
+const startCountdownTimer = () => {
     // Set the date we're counting down to
     const timeNow = new Date().getTime()
     const countDownDate = new Date(timeNow + 600000).getTime();
@@ -35,11 +35,35 @@ const countdownTimer = () => {
 }
 
 const Fuse = () => {
-    countdownTimer();
+    // useEffect(startCountdownTimer)
+    const [numberOfPlayers, setNumberOfPlayers] = useState(3)
+
+    const valuetext = value => {
+        return `${value} Players`
+    }
+
+    const onPlayerQuantityChange = (event, value) => {
+        setNumberOfPlayers(value)
+    }
 
     return (
         <Container>
-            <Dice />        
+            <div id="demo"></div>
+            <Slider
+                defaultValue={3}
+                getAriaValueText={valuetext}
+                aria-labelledby="discrete-slider"
+                valueLabelDisplay="auto"
+                onChange={onPlayerQuantityChange}
+                step={1}
+                marks
+                min={2}
+                max={6}
+                style={
+                    {width: '10vw'}
+                }
+            />
+            <Dice {...{numberOfPlayers}}/>        
         </Container>
     );
 }
