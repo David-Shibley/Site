@@ -7,7 +7,7 @@ const DailySites = () => {
         const input = document.querySelector('#AddNewTabField');
         input.addEventListener('keyup', event => {
             if (event.keyCode === 13 && input.value) {
-                addTab();                    
+                addTab();
             }
         })
     })
@@ -65,7 +65,13 @@ const DailySites = () => {
     }
 
     function loadSites()  {
-        return checkedTabs && checkedTabs.forEach(tab => window.open(tab.value))
+        return checkedTabs && checkedTabs.forEach(tab => {
+            if (tab.value && tab.value.indexOf('http') === 0) {
+                window.open(tab.value)
+            } else {
+                window.open(`https://${tab.value}`)
+            }
+        })
     }
 
     function deleteSelected() {

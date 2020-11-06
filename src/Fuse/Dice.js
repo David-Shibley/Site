@@ -30,11 +30,17 @@ const Dice = props => {
         return { chosenColor, randomDieNumber }
     }
 
-    for (let i = dice.length; i < numberOfPlayers; i++) {
+    while (dice.length < numberOfPlayers) {
         const diceCopy = dice;
         const newDice = generateRandomDiceNum()
         diceCopy.push(newDice)
         setDice(diceCopy)
+    }
+
+    while (dice.length > numberOfPlayers) {
+        const diceCopy = dice;
+        diceCopy.pop()
+        setDice(diceCopy) 
     }
     
     const generateDice = () => {
