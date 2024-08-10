@@ -7,6 +7,7 @@ import Tab from '@material-ui/core/Tab';
 import DailySites from './Daily_Runner/DailySites';
 import Portfolio from './Portfolio';
 import Fuse from './Fuse/Fuse'
+import { GameProvider } from './Fuse/GameContext';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -58,6 +59,7 @@ export default function App() {
   };
 
   return (
+    <GameProvider>
     <div className={classes.root}>
       <AppBar className={classes.navBar}>
         <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
@@ -76,5 +78,6 @@ export default function App() {
         <Fuse />
       </TabPanel>
     </div>
+    </GameProvider>
   );
 }

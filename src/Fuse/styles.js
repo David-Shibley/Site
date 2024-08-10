@@ -27,8 +27,9 @@ export const colorOptions = [
 export const makeDiceBoardStyles = () => {
     return (makeStyles(() => ({
         board: {
-            height: '40vh',
+            height: '30vh',
             display: 'flex',
+            alignItems: 'flex-end'
         }
     })))()
 }

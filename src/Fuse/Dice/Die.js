@@ -1,29 +1,34 @@
-import React, { useRef } from 'react';
+import React, { useContext, useRef } from 'react';
 import { Card, CardContent } from '@material-ui/core';
-import makeDieStyle from './styles'
+import GameContext from '../GameContext.js';
+import makeDieStyle from '../styles.js'
 
-const Die = props => {
-    const { dice, die, players, setDice } = props;
+const Die = ({ die }) => {
+    const { currentPlayer, socket, room, dice, playerDie, setPlayerDie } = useContext(GameContext);
 
     const dieRef = useRef();
 
     const classes = makeDieStyle(die);
 
     const onDiceClick = () => {
-        const dieIndex = dice.indexOf(die);
-        const newDiceArray = new Array(...dice);
-        
-        if (die.owner) {
-            newDiceArray[dieIndex].owner = null;
-            setDice(newDiceArray);
+        const dieCopy = die;
+        if (dieCopy && dieCopy.owner && dieCopy.owner.id !== currentPlayer.id) return
+        if (die.owner === undefined || die.owner === null) {
+            dieCopy.owner = currentPlayer
+            setPlayerDie(dieCopy)   
+        } else if (die.owner.id !== currentPlayer.id) {
+            dieCopy.owner = currentPlayer
+            setPlayerDie(dieCopy)
         } else {
-            newDiceArray[dieIndex].owner = players[0]
-            setDice(newDiceArray);
+            dieCopy.owner = null
+            setPlayerDie({})
         }
+
+        socket.emit('updateDiceOwner', room, { die: dieCopy, dice, currentPlayer })
     }
 
     const generateDieConent = die => {
-        switch (die.randomDieNumber) {
+        switch (die.value) {
             case 1:
                 return <span className={classes.dot}></span>            
 
@@ -53,13 +58,15 @@ const Die = props => {
                 </React.Fragment>
         
             default:
-                break;
+                return <React.Fragment>
+                    <div className='column'>{die.value}</div>
+                </React.Fragment>
         }
     }
  
 
     return (
-        <Card className={classes[`face-${die.randomDieNumber}`]} onClick={onDiceClick}>
+        <Card className={classes[`face-${die.value}`]} onClick={onDiceClick}>
             <CardContent ref={dieRef}>
                 {generateDieConent(die)}
             </CardContent>
