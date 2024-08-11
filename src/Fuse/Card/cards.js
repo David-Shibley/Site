@@ -1,42 +1,17 @@
-const VALUES_ENUM = {
-  ANY_COLOR: "any color",
-  ANY_NUMBER: "any number",
-  ANY_COLOR_OR_NUMBER: "any color or number",
-  COLOR_AND_NUMBER: "color and number",
-};
-
-const COMPARATORS_ENUM = {
-  EQUAL: "equal",
-  GREATER_THAN: "greater than",
-  LESS_THAN: "less than",
-  GREATER_THAN_OR_EQUAL: "greater than or equal",
-  LESS_THAN_OR_EQUAL: "less than or equal",
-  NOT_EQUAL: "not equal",
-  NONE: "none",
-  STACK: "stack",
-};
-
-const COLORS_ENUM = {
-    RED: "red",
-    BLUE: "blue",
-    GREEN: "green",
-    YELLOW: "yellow",
-    PURPLE: "purple",
-    ORANGE: "orange",
-    BLACK: "black",
-    WHITE: "white",
-};
+import { COLORS_ENUM, VALUES_ENUM, COMPARATORS_ENUM } from '../constants';
 
 export const CardsList = [
   {
     dice: [
       {
-        value: VALUES_ENUM.COLOR_AND_NUMBER,
-        chosenColor: COLORS_ENUM.WHITE,
+        value: VALUES_ENUM.ANY,
+        color: COLORS_ENUM.ANY,
+        hash: `${COLORS_ENUM.ANY}_${VALUES_ENUM.ANY_NUMBER}`,
       },
       {
-        value: VALUES_ENUM.COLOR_AND_NUMBER,
-        chosenColor: COLORS_ENUM.WHITE,
+        value: VALUES_ENUM.ANY,
+        color: COLORS_ENUM.ANY,
+        hash: `${COLORS_ENUM.ANY}_${VALUES_ENUM.ANY_NUMBER}`,
       },
     ],
     comparator: COMPARATORS_ENUM.EQUAL,
@@ -47,19 +22,19 @@ export const CardsList = [
     dice: [
         {
             value: 3,
-            chosenColor: COLORS_ENUM.BLACK,
+            color: COLORS_ENUM.BLACK,
         },
         {
             value: 5,
-            chosenColor: COLORS_ENUM.BLACK,
+            color: COLORS_ENUM.BLACK,
         },
         {
             value: 4,
-            chosenColor: COLORS_ENUM.BLACK,
+            color: COLORS_ENUM.BLACK,
         },
         {
             value: 3,
-            chosenColor: COLORS_ENUM.BLACK,
+            color: COLORS_ENUM.BLACK,
         }
     ],
     comparator: COMPARATORS_ENUM.NONE,
@@ -68,20 +43,21 @@ export const CardsList = [
   },{
     dice: [
         {
-            value: COLORS_ENUM.BLUE,
-            chosenColor: COLORS_ENUM.BLUE,
+            value: VALUES_ENUM.ANY,
+            color: COLORS_ENUM.BLUE,
         },
         {
-            value: COLORS_ENUM.YELLOW,
-            chosenColor: COLORS_ENUM.YELLOW,
+            value: VALUES_ENUM.ANY,
+            color: COLORS_ENUM.YELLOW,
         },
         {
-            value: COLORS_ENUM.BLACK,
-            chosenColor: COLORS_ENUM.BLACK,
+            value: VALUES_ENUM.ANY,
+            color: COLORS_ENUM.BLACK,
         }
     ],
     comparator: COMPARATORS_ENUM.STACK,
     point: 2,
     hash: Math.random(),
+    requiredOrder: [COLORS_ENUM.BLUE, COLORS_ENUM.YELLOW, COLORS_ENUM.BLACK]
   }
 ];

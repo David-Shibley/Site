@@ -1,7 +1,7 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import GameContext from '../GameContext';
 import Die from './Die';
-import { Container } from '@material-ui/core';
+import { Container, Button } from '@material-ui/core';
 import { colorOptions, makeDiceBoardStyles } from '../styles'
 
 const getRandomNumber = (min, max) => {
@@ -19,9 +19,9 @@ const generateRandomDiceNum = (colorsArray) => {
     const randomDieNumber = getRandomNumber(1, 7);
     const randomColorIndex = getRandomNumber(0, 5);
 
-    const chosenColor = colorsArray[randomColorIndex];
+    const color = colorsArray[randomColorIndex];
 
-    return { chosenColor, value: randomDieNumber, hash: Math.random() }
+    return { color, value: randomDieNumber, hash: Math.random() }
 }
 
 export const getDice = (dice, setDice, players, socket, colorsArray, room) => {
@@ -45,33 +45,37 @@ const Dice = () => {
     let incrementer = 0;
     const { socket, players, setDice, room, colorOptionIndex } = useContext(GameContext);
     let { dice } = useContext(GameContext);
+    const [localDice, setLocalDice] = useState(dice);
     const diceBoardStyles = makeDiceBoardStyles();
     const colorsArray = colorOptions[colorOptionIndex];
 
     useEffect(() => {
-        socket.on('setDice', (dice) => {
-            setDice(dice)
+        if (socket && players.length > 0) {
+            dice = getDice(dice, setDice, players, socket, colorsArray, room)
         }
-        )
-        return () => {
-            socket.off('setDice')
-        }
-    }, [])
+    }
+    , [players, socket, room, dice])
 
     if (dice && dice.length === 0) {
         dice = getDice(dice, setDice, players, socket, colorsArray, room)
     }
 
+    const onRemove = (die) => {
+        const diceCopy = dice.filter(d => d.hash !== die.hash)
+        emitSetDice(diceCopy, room, socket, setDice)
+        return diceCopy
+    }
+
+    const rerollDice = () => {
+        const newDice = localDice.map(() => generateRandomDiceNum(colorsArray));
+        emitSetDice(newDice, room, socket, setLocalDice);
+    }
+
     const generateDice = () => {
         return dice.map(die => {
             incrementer++;
-            const dieProps = {
-                die,
-                setDice,
-                colorsArray,
-            }
 
-            return <Die key={incrementer} {...dieProps} />
+            return <Die key={incrementer} {...{ die, onRemove }} />
         })
     }
     
@@ -80,6 +84,9 @@ const Dice = () => {
             <Container className={diceBoardStyles.board}>
                 {generateDice()}
             </Container>
+            <Button variant="contained" color="primary" onClick={rerollDice}>
+                Reroll Dice
+            </Button>
         </React.Fragment>
     )
 }

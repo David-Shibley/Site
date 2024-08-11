@@ -23,7 +23,7 @@ export const onUpdateCardOwner = ({
           return c.hash !== card.hash || c.hash === playerCard.hash;
         });
         setBoardCards(newCards);
-        setPlayerCard(card);
+        setPlayerCard({ ...card, owner: player});
       }
     } else {
       if (boardCards.length > 0) {
@@ -31,7 +31,7 @@ export const onUpdateCardOwner = ({
           return c.hash !== card.hash || c.hash === playerCard.hash;
         });
         if (currentPlayer && player.id === currentPlayer.id) {
-          setPlayerCard(card);
+          setPlayerCard({ ...card, owner: player });
         }
         setBoardCards(newCards);
       }
@@ -44,6 +44,36 @@ export const updateCardOwner = (value, room, socket, currentPlayer) => {
     socket.emit("updateCardOwner", room, value, currentPlayer);
   }
 };
+
+export const isCardComplete = (card) => {
+  const { playedDice, dice } = card;
+  switch (card.comparator) {
+    case "equal":
+      if (playedDice && playedDice.length === dice.length) {
+        if (dice.every((d) => d.value === "*")) {
+          if (dice.every((d) => d.color === "*")) {
+            return true
+          } else {
+            return playedDice.every((d) => d.color === (dice.find((die) => die.color === d.color || die.color === "*") || {}).color);
+          }
+        } else {
+          if (dice.every((d) => d.color === "*")) {
+            return playedDice.every((d) => d.value === (dice.find((die) => die.value === d.value || die.value === "*") || {}).value);
+          }
+        }
+      }
+      return false
+    case "NONE":
+      return card.dice.length === 4;
+    default:
+      return false;
+  }
+};
+
+export const markCardComplete = (card, completedCards, setCompletedCards) => {
+  card.completed = true;
+  setCompletedCards([...completedCards, card]);
+}
 
 export const getRandomCards = (numberOfPlayers) => {
     return CardsList.slice(0, numberOfPlayers);

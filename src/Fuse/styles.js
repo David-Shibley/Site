@@ -2,27 +2,14 @@ import { makeStyles } from '@material-ui/core';
 
 export const colorOptions = [
     [
-        '#d81159ff',
-        '#6320eeff',
-        '#218380ff',
+        '#d81159ff', // blue
+        '#6320eeff', // green
+        '#218380ff', // red
         '#fbb13cff',
         '#1a090dff',
     ],
-    [
-        '#f7f052ff',
-        '#e71d36ff',
-        '#25171aff',
-        '#279af1ff',
-        '#31cb00ff',
-    ],
-    [
-        '#ef6461ff',
-        '#ffffb3ff',
-        '#80ced7ff',
-        '#353238ff',
-        '#395b50ff',
-    ],
 ]
+
 
 export const makeDiceBoardStyles = () => {
     return (makeStyles(() => ({
@@ -34,11 +21,21 @@ export const makeDiceBoardStyles = () => {
     })))()
 }
 
-const makeDieStyles = props => {
-    const ownerColor = props.owner && props.owner.color
-    const boxShadowColor = ownerColor ? ownerColor : props.chosenColor;
+export const makeFadeOutStyles = () => {
+    return (makeStyles(() => ({
+        exit: {
+            opacity: 0,
+            transform: 'translateY(20px)',
+            transition: 'opacity 0.5s ease-out, transform 0.5s ease-out',
+        }
+    })))()
+}
+
+const makeDieStyles = ({ color, owner }) => {
+    const ownerColor = owner && owner.color
+    const boxShadowColor = ownerColor ? ownerColor : color;
     const diceStyle = {
-        backgroundColor: props.chosenColor, 
+        backgroundColor: color, 
         border: ownerColor ? `2px solid ${ownerColor}` : 'none',
         boxShadow: `8px 8px 16px ${boxShadowColor}`,
         width: '104px',  
@@ -46,7 +43,6 @@ const makeDieStyles = props => {
         borderRadius: '10%',
         marginLeft: '12px',
     }
-
     const dotContainerStyle = {
         height: '100%',
         width: '100%',

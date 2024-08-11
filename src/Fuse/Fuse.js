@@ -28,7 +28,7 @@ const Fuse = () => {
         <Button onClick={() => toggleDrawer(true)}>Room details</Button>
         <Button onClick={startGame}>Start Game</Button>
         <div id="demo"></div>
-        <div style={{ display: "flex", height: "200px" }}>
+        <div style={{ display: "flex" }}>
           {boardCards && <TableCards />}
         </div>
         <div>

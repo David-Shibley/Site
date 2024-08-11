@@ -3,7 +3,11 @@ import io from "socket.io-client";
 import { colorOptions } from "./styles";
 import { getDice } from "./Dice/Dice";
 import { updateDiceOwner } from "./Dice/helpers";
-import { getRandomCards, onUpdateCardOwner, updateCardOwner } from "./Card/helpers";
+import {
+  getRandomCards,
+  onUpdateCardOwner,
+  updateCardOwner,
+} from "./Card/helpers";
 import { startCountdownTimer, stopCountdownTimer } from "./helpers";
 
 const GameContext = createContext();
@@ -22,10 +26,12 @@ export const GameProvider = ({ children }) => {
   const [open, setOpen] = useState(false);
   const [socket, setSocket] = useState(null);
   const [intervalId, setIntervalId] = useState(null);
+  const [completedCards, setCompletedCards] = useState([]);
   const colorsArray = colorOptions[colorOptionIndex];
 
   useEffect(() => {
-    const newSocket = io("site-server-production.up.railway.app");
+    // const newSocket = io("site-server-production.up.railway.app");
+    const newSocket = io("http://localhost:4000");
     setSocket(newSocket);
 
     return () => newSocket.close();
@@ -62,10 +68,16 @@ export const GameProvider = ({ children }) => {
       setBoardCards(getRandomCards(players.length));
     });
 
+    socket.on("setDice", (dice) => {
+      console.log("setDice", dice);
+      setDice(dice);
+    });
+
     return () => {
       socket.off("updateDiceOwner");
       socket.off("updatePlayers");
       socket.off("updateCardOwner");
+      socket.off("setDice");
       socket.off("startGame");
       stopCountdownTimer(intervalId);
     };
@@ -100,6 +112,7 @@ export const GameProvider = ({ children }) => {
         players,
         currentPlayer,
         boardCards,
+        completedCards,
         playerCard,
         playerDie,
         dice,
@@ -109,7 +122,9 @@ export const GameProvider = ({ children }) => {
         socket,
         loginPlayer,
         startGame,
+        setDice,
         setBoardCards,
+        setCompletedCards,
         setPlayerCard,
         setPlayerDie,
         setOpen,

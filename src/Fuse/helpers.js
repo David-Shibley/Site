@@ -33,3 +33,20 @@ export const stopCountdownTimer = (intervalId) => {
     demoTag.innerHTML = "";
   }
 };
+export function getComplementaryColor(hex) {
+  // Remove the hash at the start if it's there
+  hex = hex.replace('#', '');
+
+  // Parse the hex color to RGB
+  const r = parseInt(hex.substring(0, 2), 16);
+  const g = parseInt(hex.substring(2, 4), 16);
+  const b = parseInt(hex.substring(4, 6), 16);
+
+  // Calculate the complementary color
+  const compR = (255 - r).toString(16).padStart(2, '0');
+  const compG = (255 - g).toString(16).padStart(2, '0');
+  const compB = (255 - b).toString(16).padStart(2, '0');
+
+  // Combine the complementary RGB values back into a hex string
+  return `#${compR}${compG}${compB}`;
+}
