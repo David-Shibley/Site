@@ -1,12 +1,12 @@
-import React, { useContext, useRef, useState, useEffect } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { Card, CardContent } from '@material-ui/core';
 import GameContext from '../GameContext.js';
 import { isCardComplete, markCardComplete } from '../Card/helpers.js';
 import makeDieStyle, { makeFadeOutStyles } from '../styles.js';
-import { CardsList } from '../Card/cards.js';
+import { COMPARATORS_ENUM } from '../constants.js';
 
 const Die = ({ die, onRemove }) => {
-    const { completedCards, currentPlayer, socket, room, dice, playerCard, setBoardCards, setCompletedCards, setPlayerCard, setPlayerDie } = useContext(GameContext);
+    const { completedCards, currentPlayer, socket, room, dice, boardCards, playerCard, setBoardCards, setCompletedCards, setPlayerCard, setPlayerDie } = useContext(GameContext);
     const [isExiting, setIsExiting] = useState(false);
     const dieRef = useRef();
     const classes = makeDieStyle(die);
@@ -20,38 +20,56 @@ const Die = ({ die, onRemove }) => {
     
         // If die is not owned, assign it to the current player
         if (!dieCopy.owner) {
+            setIsExiting(true);
+            setTimeout(() => {
+                onRemove(die);
+                setIsExiting(false);
+            }, 500);
+    
             if (playerCard && playerCard.owner && playerCard.owner.id === currentPlayer.id) {
                 const updatedPlayedDice = [...(playerCard.playedDice || []), dieCopy];
+                const updatedPlayerCard = { ...playerCard, playedDice: updatedPlayedDice };
     
+                // Handle the case where a specific order is required
                 if (playerCard.requiredOrder) {
-                    // Check if the played dice follow the correct color order
                     const isOrderCorrect = updatedPlayedDice.every((playedDie, index) => {
                         const expectedColor = playerCard.requiredOrder[index];
-                        if (expectedColor ? playedDie.color === expectedColor : true) {
-                            if (index === updatedPlayedDice.length - 1) {
-                                markCardComplete(playerCard, completedCards, setCompletedCards);
+                        if (expectedColor ? playedDie.color === expectedColor || playedDie.value === expectedColor : true) {
+                            if (index === playerCard.dice.length - 1) {
+                                updatedPlayerCard.completed = true;
+                                return true;
                             }
                             return true;
                         }
                     });
-        
-                    // If the order is incorrect, prevent adding the die and show an error or return
+    
                     if (!isOrderCorrect) {
-                        alert("You must play the dice in the correct order: Blue, Yellow, Black.");
+                        alert(`You must play the dice in the correct order: ${playerCard.requiredOrder.join(', ')}`);
                         return;
                     }
-                }    
+                }
     
-                const updatedPlayerCard = { ...playerCard, playedDice: updatedPlayedDice };
+                // Handle the case where no specific order is required
+                if (playerCard.comparator === COMPARATORS_ENUM.NONE) {
+                    const isMatch = playerCard.dice.some((playedDie) =>
+                            (playedDie.color === dieCopy.color || playedDie.color === '*') &&
+                            (playedDie.value === dieCopy.value || playedDie.value === '*')
+                        );
+
+                    if (!isMatch) {
+                        alert(`You must play the correct dice ${playerCard.dice.map((die) => `${die.color} ${die.value}`).join(', ')}`);
+                        return;
+                    }
     
-                // Trigger fade out and removal of the die
-                setIsExiting(true);
-                setTimeout(() => onRemove(die), 500);
+                    if (isMatch && updatedPlayedDice.length === playerCard.dice.length) {
+                        updatedPlayerCard.completed = true;
+                    }
+                }
     
                 if (isCardComplete(updatedPlayerCard)) {
-                    markCardComplete(updatedPlayerCard, completedCards, setCompletedCards);
+                    markCardComplete(updatedPlayerCard, completedCards, setPlayerCard, setCompletedCards, setBoardCards);
                     setPlayerCard({});
-                    setBoardCards([CardsList.pop()]);
+                    setBoardCards([...boardCards.filter((card) => card.hash !== playerCard.hash)]);
                 } else {
                     setPlayerCard(updatedPlayerCard);
                 }
@@ -69,13 +87,6 @@ const Die = ({ die, onRemove }) => {
         socket.emit('updateDiceOwner', room, { die: dieCopy, dice, currentPlayer });
     };
     
-
-    useEffect(() => {
-        // This function runs when the component is about to unmount
-        return () => {
-            setIsExiting(true);
-        };
-    }, []);
 
     return (
         <Card 

@@ -30,8 +30,8 @@ export const GameProvider = ({ children }) => {
   const colorsArray = colorOptions[colorOptionIndex];
 
   useEffect(() => {
-    // const newSocket = io("site-server-production.up.railway.app");
-    const newSocket = io("http://localhost:4000");
+    const newSocket = io("site-server-production.up.railway.app");
+    // const newSocket = io("http://localhost:4000");
     setSocket(newSocket);
 
     return () => newSocket.close();

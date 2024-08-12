@@ -22,19 +22,19 @@ export const CardsList = [
     dice: [
         {
             value: 3,
-            color: COLORS_ENUM.BLACK,
+            color: COLORS_ENUM.ANY,
         },
         {
             value: 5,
-            color: COLORS_ENUM.BLACK,
+            color: COLORS_ENUM.ANY,
         },
         {
             value: 4,
-            color: COLORS_ENUM.BLACK,
+            color: COLORS_ENUM.ANY,
         },
         {
             value: 3,
-            color: COLORS_ENUM.BLACK,
+            color: COLORS_ENUM.ANY,
         }
     ],
     comparator: COMPARATORS_ENUM.NONE,

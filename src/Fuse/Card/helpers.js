@@ -63,15 +63,23 @@ export const isCardComplete = (card) => {
         }
       }
       return false
-    case "NONE":
-      return card.dice.length === 4;
+    case "stack":
+      return Boolean(card.completed);
+    case "none":
+      return Boolean(card.completed);
     default:
       return false;
   }
 };
 
-export const markCardComplete = (card, completedCards, setCompletedCards) => {
+export const removedCardFromBoard = (card, setBoardCards) => {
+  setBoardCards((prev) => prev.filter((c) => c.hash !== card.hash));
+};
+
+export const markCardComplete = (card, completedCards, setPlayerCard, setCompletedCards, setBoardCards) => {
   card.completed = true;
+  removedCardFromBoard(card, setBoardCards);
+  setPlayerCard({});
   setCompletedCards([...completedCards, card]);
 }
 
