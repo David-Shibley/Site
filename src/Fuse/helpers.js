@@ -1,4 +1,4 @@
-export const startCountdownTimer = () => {
+export const startCountdownTimer = (setGameComplete) => {
   const timeNow = new Date().getTime();
   const countDownDate = new Date(timeNow + 600000).getTime();
   let x;
@@ -19,6 +19,7 @@ export const startCountdownTimer = () => {
       clearInterval(x);
       if (demoTag) {
         demoTag.innerHTML = "EXPIRED";
+        setGameComplete(true)
       }
     }
   }, 1000);

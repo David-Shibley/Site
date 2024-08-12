@@ -1,12 +1,13 @@
 import React, { useContext, useRef, useState } from 'react';
 import { Card, CardContent } from '@material-ui/core';
 import GameContext from '../GameContext.js';
-import { isCardComplete, markCardComplete } from '../Card/helpers.js';
+import { isCardComplete, markCardComplete, getRandomCards } from '../Card/helpers.js';
 import makeDieStyle, { makeFadeOutStyles } from '../styles.js';
-import { COMPARATORS_ENUM } from '../constants.js';
+import { COMPARATORS_ENUM, COLORS_ENUM } from '../constants.js';
+import { getDieColor } from './helpers.js';
 
 const Die = ({ die, onRemove }) => {
-    const { completedCards, currentPlayer, socket, room, dice, boardCards, playerCard, setBoardCards, setCompletedCards, setPlayerCard, setPlayerDie } = useContext(GameContext);
+    const { completedCards, currentPlayer, socket, room, dice, boardCards, players, playerCard, setBoardCards, setCompletedCards, setPlayerCard, setPlayerDie } = useContext(GameContext);
     const [isExiting, setIsExiting] = useState(false);
     const dieRef = useRef();
     const classes = makeDieStyle(die);
@@ -44,7 +45,7 @@ const Die = ({ die, onRemove }) => {
                     });
     
                     if (!isOrderCorrect) {
-                        alert(`You must play the dice in the correct order: ${playerCard.requiredOrder.join(', ')}`);
+                        alert(`You must play the dice in the correct order: ${playerCard.requiredOrder.map((colorOrNumber) => isNaN(Number(colorOrNumber)) ? getDieColor(colorOrNumber) : colorOrNumber).join(', ')}`);
                         return;
                     }
                 }
@@ -57,7 +58,7 @@ const Die = ({ die, onRemove }) => {
                         );
 
                     if (!isMatch) {
-                        alert(`You must play the correct dice ${playerCard.dice.map((die) => `${die.color} ${die.value}`).join(', ')}`);
+                        alert(`You must play the correct dice ${playerCard.dice.map((die) => `${getDieColor(die.color)} ${die.value}`).join(', ')}`);
                         return;
                     }
     
@@ -67,9 +68,14 @@ const Die = ({ die, onRemove }) => {
                 }
     
                 if (isCardComplete(updatedPlayerCard)) {
-                    markCardComplete(updatedPlayerCard, completedCards, setPlayerCard, setCompletedCards, setBoardCards);
+                    markCardComplete(updatedPlayerCard, completedCards, boardCards, players, setPlayerCard, setCompletedCards, setBoardCards);
                     setPlayerCard({});
-                    setBoardCards([...boardCards.filter((card) => card.hash !== playerCard.hash)]);
+                    const newCards = [...boardCards.filter((card) => card.hash !== playerCard.hash)];
+                    if (newCards.length > 1) {
+                        setBoardCards(newCards);
+                    } else {
+                        setBoardCards(getRandomCards(players.length));
+                    }
                 } else {
                     setPlayerCard(updatedPlayerCard);
                 }

@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { Card } from "@material-ui/core";
 import GameContext from "../GameContext";
+import { COLOR_MAP, VALUE_MAP } from "../constants";
 
 export const CompletedCard = ({ card }) => {
   const { currentPlayer } = useContext(GameContext);
@@ -20,8 +21,8 @@ export const CompletedCard = ({ card }) => {
           {card.dice.map((die, index) => {
             return (
               <div key={index}>
-                <p>{die.value}</p>
-                <p>{die.color}</p>
+                <p>Value: {VALUE_MAP[die.value]}</p>
+                <p>Color: {COLOR_MAP[die.color]}</p>
               </div>
             );
           })}

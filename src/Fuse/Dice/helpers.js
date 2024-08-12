@@ -1,4 +1,4 @@
-
+import { COLORS_ENUM } from "../constants";
 export const updateDiceOwner = ({ die, dice, setDice, currentPlayer }) => {
     const dieIndex = dice.reduce((acc, curr, index) => {
       if (curr.hash === die.hash) {
@@ -15,3 +15,13 @@ export const updateDiceOwner = ({ die, dice, setDice, currentPlayer }) => {
     setDice(newDiceArray);
   };
   
+  export const getDieColor = (color) => {
+    return Object.keys(COLORS_ENUM).map((key) => {
+      if (COLORS_ENUM[key] === color) {
+        return key;
+      } else {
+        return ''
+      }
+    }
+    ).find((key) => key !== '');
+  }

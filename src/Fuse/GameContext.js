@@ -26,6 +26,7 @@ export const GameProvider = ({ children }) => {
   const [open, setOpen] = useState(false);
   const [socket, setSocket] = useState(null);
   const [intervalId, setIntervalId] = useState(null);
+  const [gameComplete, setGameComplete] = useState(false);
   const [completedCards, setCompletedCards] = useState([]);
   const colorsArray = colorOptions[colorOptionIndex];
 
@@ -52,6 +53,7 @@ export const GameProvider = ({ children }) => {
       onUpdateCardOwner({
         card,
         player,
+        players,
         currentPlayer,
         playerCard,
         boardCards,
@@ -63,13 +65,12 @@ export const GameProvider = ({ children }) => {
     socket.on("startGame", (newDice) => {
       setDice(newDice);
       setGameStarted(true);
-      const id = startCountdownTimer();
+      const id = startCountdownTimer(setGameComplete);
       setIntervalId(id);
       setBoardCards(getRandomCards(players.length));
     });
 
     socket.on("setDice", (dice) => {
-      console.log("setDice", dice);
       setDice(dice);
     });
 
@@ -79,7 +80,6 @@ export const GameProvider = ({ children }) => {
       socket.off("updateCardOwner");
       socket.off("setDice");
       socket.off("startGame");
-      stopCountdownTimer(intervalId);
     };
   }, [socket, currentPlayer, boardCards, playerCard, dice, gameStarted]);
 
@@ -120,19 +120,19 @@ export const GameProvider = ({ children }) => {
         colorOptionIndex,
         open,
         socket,
+        gameComplete,
         loginPlayer,
         startGame,
         setDice,
         setBoardCards,
         setCompletedCards,
+        setGameComplete,
         setPlayerCard,
         setPlayerDie,
         setOpen,
         toggleDrawer: setOpen,
         onChangeColorOptionClick,
         updateCardOwner,
-        startCountdownTimer,
-        stopCountdownTimer,
       }}
     >
       {children}

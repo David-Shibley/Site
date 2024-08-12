@@ -17,7 +17,13 @@ const Fuse = () => {
     toggleDrawer,
     startGame,
     loginPlayer,
+    completedCards,
+    gameComplete,
   } = useContext(GameContext);
+
+  if (gameComplete) {
+    return <h1>Game Over! You completed {completedCards.length}</h1>;
+  }
 
   if (loggedIn) {
     return (

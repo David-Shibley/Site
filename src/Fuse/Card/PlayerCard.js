@@ -4,6 +4,7 @@ import GameContext from "../GameContext";
 import { updateCardOwner } from "./helpers";
 import { getComplementaryColor } from "../helpers";
 import { COLOR_MAP, VALUE_MAP } from "../constants";
+import { Chip } from "@material-ui/core";
 
 export const PlayerCard = () => {
   const { playerCard, socket, room, currentPlayer } = useContext(GameContext);
@@ -24,7 +25,7 @@ export const PlayerCard = () => {
         ))}
         {playerCard.playedDice && playerCard.playedDice.map((die, index) => (
           <div key={index}>
-            <p style={{ backgroundColor: die.color, color: getComplementaryColor(die.color) }}>{die.value}</p>
+            <Chip style={{ backgroundColor: die.color, color: getComplementaryColor(die.color) }} label={die.value} />
           </div>
         ))}
         {playerCard.owner && <p>{playerCard.owner.name}</p>}
